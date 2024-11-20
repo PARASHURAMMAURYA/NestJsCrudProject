@@ -1,6 +1,8 @@
-import { Body, Controller,Delete,Get, Param, Post, Put } from '@nestjs/common';
+import { Body, Controller,Delete,Get, Param, Post, Put, Query, UsePipes } from '@nestjs/common';
 import { AppService } from 'src/app.service';
 import { CreateTodo, UpdateTodo } from './todo.dto';
+import { TodoPipe } from './todo.pipe';
+import { json } from 'stream/consumers';
  
 
 @Controller('todo')
@@ -9,6 +11,17 @@ export class TodoController {
     constructor(private appservice:AppService){} 
 
     private todos = []
+
+
+    //query params and slug
+@Get("user/:id/:slug")
+// @UsePipes(TodoPipe)
+getUserById(@Param() data,@Query('search') sea:string){
+    return { data: JSON.stringify(data), sea }
+}
+
+
+
     @Post("/create")
     createTodo(@Body() data:CreateTodo){
         // for privatly saving the user data 
@@ -64,5 +77,7 @@ export class TodoController {
        }
     }
 }
+
+
 
 
